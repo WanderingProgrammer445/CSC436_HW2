@@ -1,8 +1,10 @@
+import react from 'react';
+import {useState} from 'react';
 
-function Logout({username =''}) {
+function Logout({username ='', dispatchUser}) {
   return (
     <div>
-	    <form action="#">
+	    <form onSubmit={evt=>{evt.preventDefault();dispatchUser({type: "LOGOUT"})}}>
 	       You are logged in as <b>{username}</b> 
 		   <button name="logoutbutton" type="submit">Logout</button>
 		</form>
