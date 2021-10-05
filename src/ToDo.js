@@ -16,7 +16,7 @@ function ToDo({title='', description='', dateCreated=Date.now(), complete=false,
 		    <p>{description}</p>
 		    <p>This todo was created on {dateCreated}</p>
 		    <p>This todo was completed on {dateCompleted}</p>
-		    <input  type="checkbox" onClick={handleToggle}/>
+		    <input  type="checkbox" checked={complete} onClick={handleToggle}/>
 			<button type="button" onClick={handleDelete}>Delete</button>
 	    </div>
   );
