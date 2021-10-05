@@ -14,7 +14,7 @@ function App() {
               const newToDo = { 
                   title: action.title,
                   description: action.description,
-                  dateCreated: action.dateCreated,
+                  dateCreated: Date.now(),
                   complete: false,
                   dateCompleted: ''
                 }
@@ -22,6 +22,7 @@ function App() {
             case 'TOGGLE_TODO':
               return state.map(
                   (todo, i)=>{
+
                       if(i === action.index){
                           return {... todo, dateCompleted: action.completed?Date.now():'', complete: action.completed } 
                         } else {
@@ -58,7 +59,7 @@ function App() {
     return(
         <div>
             <UserLine username={username} dispatchUser={dispatchUser}/>
-			{username && <AddToDo username={username}/>}
+			{username && <AddToDo username={username} dispatchToDo={dispatchToDo}/>}
 			<ToDoList toDoList={toDoList} dispatchToDo={dispatchToDo}/>
         </div>
   );

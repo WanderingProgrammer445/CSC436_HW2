@@ -6,9 +6,9 @@ function ToDo({title='', description='', dateCreated=Date.now(), complete=false,
 	function handleDelete(evt){
         dispatchToDo({type:"DELETE_TODO", index})
 	}
-	
+
 	function handleToggle(evt){
-        dispatchToDo({type: "TOGGLE_TODO", index, complete: evt.target.checked})
+        dispatchToDo({type: "TOGGLE_TODO", index, completed: evt.target.checked})
 	}
     return (
         <div>

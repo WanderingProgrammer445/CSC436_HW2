@@ -5,7 +5,7 @@ function ToDoList({toDoList=[{title: 'Do something', description: 'something', d
     <div>
       
      {toDoList.map((t,i) =>
-	   <ToDo title={t.title} description={t.description} dateCreated={t.dateCreated} complete={t.complete} dateCompleted={t.dateCompleted} listIndex={i} dispatchToDo={dispatchToDo} />)
+	   <ToDo title={t.title} description={t.description} dateCreated={t.dateCreated} complete={t.complete} dateCompleted={t.dateCompleted} listIndex={i} dispatchToDo={dispatchToDo} key={i} />)
      }
      </div>
   );
