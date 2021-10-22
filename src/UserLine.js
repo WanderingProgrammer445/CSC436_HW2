@@ -6,12 +6,12 @@ import Logout from './Logout';
 function UserLine({username='', dispatchUser}) { 
    
    if(username){
-	   return <Logout username={username} dispatchUser={dispatchUser}/>
+	   return <Logout /*username={username} dispatchUser={dispatchUser}*//>
    } else {
 	   return(
 	        <>
-			    <Login dispatchUser={dispatchUser}/>
-				<Register dispatchUser={dispatchUser}/>
+			    <Login /*dispatchUser={dispatchUser}*//>
+				<Register /*dispatchUser={dispatchUser}*//>
 			</>
 	   )
    }

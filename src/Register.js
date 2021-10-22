@@ -1,7 +1,11 @@
 import react from 'react';
 import {useState} from 'react';
+import { useContext } from 'react';
+import { UserContext } from './Contexts';
 
-function Register({dispatchUser}) {
+function Register(/*{dispatchUser}*/) {
+
+	const {dispatch} = useContext(UserContext);
 
 	const [username, setUsername] = useState('');
 	const [newPassword, setNewPassword] = useState('')
@@ -14,7 +18,7 @@ function Register({dispatchUser}) {
 
   return (
     <div>
-	    <form onSubmit={evt=>{evt.preventDefault();dispatchUser({type:"REGISTER", username})}}>
+	    <form onSubmit={evt=>{evt.preventDefault();dispatch({type:"REGISTER", username})/*dispatchUser({type:"REGISTER", username})*/}}>
 	       <label htmlFor="newUser">Username:  </label><input id="newUser" type="text" name="newUser" onChange={handleUserName}/>
 	       <label htmlFor="newPassword">Password:   </label><input id="newPassword" type="password" value={newPassword} name="newPassword" onChange={updateNewPassword}/>
 		   <label htmlFor="confirmPassword">Confirm Password:   </label><input id="confirmPassword" type="password" value={confirmPassword} name="confirmPassword" onChange={updateConfirmPassword}/>
