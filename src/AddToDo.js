@@ -1,4 +1,5 @@
-import {useState} from 'react';
+import {useContext, useState} from 'react';
+import { ToDoContext } from './Contexts';
 
 function AddToDo({username, dispatchToDo}) {
 
@@ -6,9 +7,17 @@ function AddToDo({username, dispatchToDo}) {
 
 	const [description, setDescription] = useState('')
 
+	const {createToDo} = useContext(ToDoContext);
 
-	function createToDo(){
-		dispatchToDo({type: "CREATE_TODO", title, description})
+	function createToDoWrapper(){
+
+		createToDo({
+			title: title,
+			description: description,
+            dateCreated: Date.now(),
+			
+		})
+		//dispatchToDo({type: "CREATE_TODO", title, description})
 
 	}
 
@@ -27,7 +36,7 @@ function AddToDo({username, dispatchToDo}) {
 	if(username){
   return (
     <div>
-	    <form onSubmit={evt =>{evt.preventDefault();createToDo()}}>
+	    <form onSubmit={evt =>{evt.preventDefault();createToDoWrapper()}}>
 			    
 	       <label htmlFor = "title">Title:  </label><input id="title" type="text" value={title} name="title" onChange={updateTitle}/>
 	       <label htmlFor = "description">Description: </label><input id="description" value={description} type="text" name="description" onChange={updateDescription}/>

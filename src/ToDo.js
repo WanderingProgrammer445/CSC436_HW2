@@ -1,14 +1,14 @@
 
 
-function ToDo({title='', description='', dateCreated=Date.now(), complete=false, listIndex, dateCompleted=Date.now(), dispatchToDo}) {
-    const index = listIndex;
+function ToDo({title='', description='', dateCreated=Date.now(), complete=false, listIndex, dateCompleted=Date.now(), dispatchToDo, key}) {
+    const toDoKey = key;
 
 	function handleDelete(evt){
-        dispatchToDo({type:"DELETE_TODO", index})
+        dispatchToDo({type:"DELETE_TODO", toDoItemKey: toDoKey})
 	}
 
 	function handleToggle(evt){
-        dispatchToDo({type: "TOGGLE_TODO", index, completed: evt.target.checked})
+        dispatchToDo({type: "TOGGLE_TODO", toDoItemKey: toDoKey, completed: evt.target.checked})
 	}
     return (
         <div>
