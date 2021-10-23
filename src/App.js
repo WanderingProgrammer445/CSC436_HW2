@@ -15,17 +15,11 @@ function App() {
         method: 'get'
       }))
 
-    const[toDoDeleted, deleteToDo] = useResource((id)=>({
-        url: `/todos/${id}`,
-        method: 'delete'
-    }))
 
-    const[toDoToggled, toggleToDo] = useResource((id, title, description, dateCreated, complete, dateCompleted)=>({
-        url: `/todos/${id}`,
-        method: 'put',
-        data: {id, title, description, dateCreated, complete, dateCompleted}
 
-    }))
+
+
+    
 
    const [ toDoCreated, createToDo ] = useResource((title, description, dateCreated, complete, dateCompleted) => ({
         url: '/todos',
@@ -36,16 +30,6 @@ function App() {
     
     function toDoReducer (state, action) {
         switch (action.type) {
-           /* case 'CREATE_TODO':
-              const newToDo = { 
-                  title: action.title,
-                  description: action.description,
-                  dateCreated: Date.now(),
-                  complete: false,
-                  dateCompleted: ''
-                }
-                return [ newToDo, ...state ]
-                */
             case 'TOGGLE_TODO':
               return state.map(
                   (todo, i)=>{
@@ -70,7 +54,7 @@ function App() {
  
 
     
-    const [toDoList, dispatchToDo] = useReducer(toDoReducer,[/*{title: 'Do something', description: 'something', dateCreated: Date.now(), complete: false, dateCompleted: ''}*/]);
+    const [toDoList, dispatchToDo] = useReducer(toDoReducer,[]);
 
     
 
@@ -97,8 +81,8 @@ function App() {
    const [username, dispatchUser] = useReducer(userReducer,"");
 
     return(
-        <div><UserContext.Provider value={{user: username, dispatch: dispatchUser}}>
-            <ToDoContext.Provider value={{toDoList: toDoList, dispatchToDo: dispatchToDo, createToDo: createToDo, deleteToDo: deleteToDo, toggleToDo: toggleToDo}}>
+        <div><UserContext.Provider value={{username: username, dispatch: dispatchUser}}>
+            <ToDoContext.Provider value={{toDoList: toDoList, dispatchToDo: dispatchToDo, createToDo: createToDo}}>
             <UserLine username={username} dispatchUser={dispatchUser}/>
 			{username && <AddToDo username={username} dispatchToDo={dispatchToDo}/>}
 			<ToDoList toDoList={toDoList} dispatchToDo={dispatchToDo}/>

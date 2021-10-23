@@ -1,9 +1,25 @@
 import {useContext} from 'react'
 import {ToDoContext} from './Contexts'
+import {useResource} from 'react-request-hook'
 
-function ToDo({title='', description='', dateCreated=Date.now(), complete=false, listIndex, dateCompleted=Date.now(), key}) {
+function ToDo({title='', description='', dateCreated=Date.now(), complete=false, listIndex, dateCompleted=Date.now()}) {
     const toDoKey = listIndex;
-	const {dispatchToDo, createToDo, deleteToDo, toggleToDo} = useContext(ToDoContext)
+
+	const[toDoDeleted, deleteToDo] = useResource((id)=>({
+        url: `/todos/${id}`,
+        method: 'delete'
+    }))
+
+	const[toDoToggled, toggleToDo] = useResource((id, title, description, dateCreated, complete, dateCompleted)=>({
+        url: `/todos/${id}`,
+        method: 'put',
+        data: {id, title, description, dateCreated, complete, dateCompleted}
+
+    }))
+
+	
+
+	const {dispatchToDo, createToDo} = useContext(ToDoContext)
 	
 
 	function handleDelete(evt){
