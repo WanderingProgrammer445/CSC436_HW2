@@ -15,14 +15,28 @@ function App() {
         method: 'get'
       }))
 
-    const [ toDoCreated, createToDo ] = useResource(() => ({
+    const[toDoDeleted, deleteToDo] = useResource((id)=>({
+        url: `/todos/${id}`,
+        method: 'delete'
+    }))
+
+    const[toDoToggled, toggleToDo] = useResource((id, title, description, dateCreated, complete, dateCompleted)=>({
+        url: `/todos/${id}`,
+        method: 'put',
+        data: {id, title, description, dateCreated, complete, dateCompleted}
+
+    }))
+
+   const [ toDoCreated, createToDo ] = useResource((title, description, dateCreated, complete, dateCompleted) => ({
         url: '/todos',
-        method: 'post'
+        method: 'post',
+        data: {title, description, dateCreated, complete, dateCompleted}
+
       }))
     
     function toDoReducer (state, action) {
         switch (action.type) {
-            case 'CREATE_TODO':
+           /* case 'CREATE_TODO':
               const newToDo = { 
                   title: action.title,
                   description: action.description,
@@ -31,12 +45,13 @@ function App() {
                   dateCompleted: ''
                 }
                 return [ newToDo, ...state ]
+                */
             case 'TOGGLE_TODO':
               return state.map(
                   (todo, i)=>{
 
-                      if(i === action.toDoItemKey){
-                          return {... todo, dateCompleted: action.completed?Date.now():'', complete: action.completed } 
+                      if(todo.id === action.toDoItemKey){
+                          return {... todo, dateCompleted: action.completed?action.date:'', complete: action.completed } 
                         } else {
                             return todo
                         }
@@ -45,12 +60,14 @@ function App() {
             case 'FETCH_TODOS':
                 return action.todos;  
             case 'DELETE_TODO':
-                return state.filter((todo,i)=>{return i!==action.index})
+                return state.filter((todo,i)=>{return todo.id!==action.toDoItemKey})
             default:
                return state;
         }
       }
+    useEffect(getToDos,[toDoCreated])
 
+ 
 
     
     const [toDoList, dispatchToDo] = useReducer(toDoReducer,[/*{title: 'Do something', description: 'something', dateCreated: Date.now(), complete: false, dateCompleted: ''}*/]);
@@ -81,7 +98,7 @@ function App() {
 
     return(
         <div><UserContext.Provider value={{user: username, dispatch: dispatchUser}}>
-            <ToDoContext.Provider value={{toDoList: toDoList, dispatchToDo: dispatchToDo, createToDo: createToDo}}>
+            <ToDoContext.Provider value={{toDoList: toDoList, dispatchToDo: dispatchToDo, createToDo: createToDo, deleteToDo: deleteToDo, toggleToDo: toggleToDo}}>
             <UserLine username={username} dispatchUser={dispatchUser}/>
 			{username && <AddToDo username={username} dispatchToDo={dispatchToDo}/>}
 			<ToDoList toDoList={toDoList} dispatchToDo={dispatchToDo}/>

@@ -5,6 +5,7 @@
       "title": "Do Laundry",
       "description": "Wash, dry, and fold",
       "author": "testuser",
+      "dateCreated": 12328945,
       "complete": false,
       "dateCompleted": null
     },
@@ -13,8 +14,17 @@
       "title": "Pay Bills",
       "description": "Car, Electric, Gas",
       "author": "testuser",
+      "dateCreated": 12312310,
       "complete": false,
       "dateCompleted": null
+    },
+    {
+      "id": 3,
+      "title": "s",
+      "description": "t",
+      "dateCreated": 1635015858401,
+      "complete": true,
+      "dateCompleted": 1635016047039
     }
   ],
   "users": [

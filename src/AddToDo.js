@@ -11,12 +11,7 @@ function AddToDo({username, dispatchToDo}) {
 
 	function createToDoWrapper(){
 
-		createToDo({
-			title: title,
-			description: description,
-            dateCreated: Date.now(),
-			
-		})
+		createToDo(title, description, Date.now(), false,"")
 		//dispatchToDo({type: "CREATE_TODO", title, description})
 
 	}
