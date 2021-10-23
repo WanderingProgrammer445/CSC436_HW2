@@ -17,6 +17,14 @@
       "dateCreated": 12312310,
       "complete": false,
       "dateCompleted": null
+    },
+    {
+      "title": "Another todo",
+      "description": "Do something",
+      "dateCreated": 1635025278974,
+      "complete": false,
+      "dateCompleted": "",
+      "id": 3
     }
   ],
   "users": [
@@ -29,6 +37,11 @@
       "username": "hello",
       "password": "abc",
       "id": 2
+    },
+    {
+      "username": "helloagain",
+      "password": "Hi",
+      "id": 3
     }
   ]
 }
