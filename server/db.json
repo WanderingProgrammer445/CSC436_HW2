@@ -1,0 +1,47 @@
+{
+  "todos": [
+    {
+      "id": 1,
+      "title": "Do Laundry",
+      "description": "Wash, dry, and fold",
+      "author": "testuser",
+      "dateCreated": 12328945,
+      "complete": false,
+      "dateCompleted": null
+    },
+    {
+      "id": 2,
+      "title": "Pay Bills",
+      "description": "Car, Electric, Gas",
+      "author": "testuser",
+      "dateCreated": 12312310,
+      "complete": false,
+      "dateCompleted": null
+    },
+    {
+      "title": "Another todo",
+      "description": "Do something",
+      "dateCreated": 1635025278974,
+      "complete": false,
+      "dateCompleted": "",
+      "id": 3
+    }
+  ],
+  "users": [
+    {
+      "id": 1,
+      "username": "testuser",
+      "password": "badpassword"
+    },
+    {
+      "username": "hello",
+      "password": "abc",
+      "id": 2
+    },
+    {
+      "username": "helloagain",
+      "password": "Hi",
+      "id": 3
+    }
+  ]
+}

@@ -1,14 +1,38 @@
+import {useContext} from 'react'
+import {ToDoContext} from './Contexts'
+import {useResource} from 'react-request-hook'
 
+function ToDo({title='', description='', dateCreated=Date.now(), complete=false, listIndex, dateCompleted=Date.now()}) {
+    const toDoKey = listIndex;
 
-function ToDo({title='', description='', dateCreated=Date.now(), complete=false, listIndex, dateCompleted=Date.now(), dispatchToDo}) {
-    const index = listIndex;
+	const[toDoDeleted, deleteToDo] = useResource((id)=>({
+        url: `/todos/${id}`,
+        method: 'delete'
+    }))
+
+	const[toDoToggled, toggleToDo] = useResource((id, title, description, dateCreated, complete, dateCompleted)=>({
+        url: `/todos/${id}`,
+        method: 'put',
+        data: {id, title, description, dateCreated, complete, dateCompleted}
+
+    }))
+
+	
+
+	const {dispatchToDo, createToDo} = useContext(ToDoContext)
+	
 
 	function handleDelete(evt){
-        dispatchToDo({type:"DELETE_TODO", index})
+        dispatchToDo({type:"DELETE_TODO", toDoItemKey: toDoKey})
+        deleteToDo(toDoKey)
+
+
 	}
 
 	function handleToggle(evt){
-        dispatchToDo({type: "TOGGLE_TODO", index, completed: evt.target.checked})
+		const date = Date.now()
+        dispatchToDo({type: "TOGGLE_TODO", toDoItemKey: toDoKey, completed: evt.target.checked, date: date})
+		toggleToDo(toDoKey, title, description, dateCreated, evt.target.checked, evt.target.checked?date:'')
 	}
     return (
         <div>
