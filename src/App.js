@@ -5,10 +5,19 @@ import react from 'react';
 import { useResource } from 'react-request-hook';
 import {useState, useReducer, useEffect} from 'react';
 import { ToDoContext, UserContext } from './Contexts';
+import { Container } from 'react-bootstrap';
+import {Router,View} from 'react-navi';
+import { route,mount} from 'navi';
+import UserPage from './UserPage';
+import ProfilePage from './ProfilePage';
 
 function App() {
    
+   const routes = mount({
+       '/users':route({view: <UserPage/>}),
+       '/users/:userId':route(async req =>{view: <ProfilePage id={req.params.userId}/>})
 
+   })
 
    const [ toDos, getToDos ] = useResource(() => ({
         url: '/todos',
@@ -83,9 +92,11 @@ function App() {
     return(
         <div><UserContext.Provider value={{username: username, dispatch: dispatchUser}}>
             <ToDoContext.Provider value={{toDoList: toDoList, dispatchToDo: dispatchToDo, createToDo: createToDo}}>
-            <UserLine username={username} dispatchUser={dispatchUser}/>
+                <Container>
+            <UserLine/>
 			{username && <AddToDo username={username} dispatchToDo={dispatchToDo}/>}
 			<ToDoList toDoList={toDoList} dispatchToDo={dispatchToDo}/>
+                </Container>
             </ToDoContext.Provider>
             </UserContext.Provider>
         </div>
