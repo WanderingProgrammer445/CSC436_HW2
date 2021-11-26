@@ -6,8 +6,10 @@ import App from './App';
 import { RequestProvider } from 'react-request-hook'
 import axios from 'axios'
 
+//baseURL: 'http://localhost:3000/api/'
 const axiosInstance = axios.create({
-  baseURL: 'http://localhost:3000/api/'
+  
+  baseURL: '/'
 })
 //Suspended component throws error so need to wrap with "fallback"
 ReactDOM.render(
