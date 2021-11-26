@@ -1,17 +1,19 @@
 import {useContext, useState} from 'react';
-import { ToDoContext } from './Contexts';
+import { ToDoContext, UserContext } from './Contexts';
 
-function AddToDo({username, dispatchToDo}) {
+function AddToDo() {
 
 	const [title, setTitle] = useState('')
 
 	const [description, setDescription] = useState('')
 
 	const {createToDo} = useContext(ToDoContext);
+	const {token, username} = useContext(UserContext);
+
 
 	function createToDoWrapper(){
 
-		createToDo(title, description, Date.now(), false,"")
+		createToDo(title, description, Date.now(), false,"",token)
 		
 
 	}

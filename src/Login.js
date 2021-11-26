@@ -8,20 +8,28 @@ import {Modal, Form, Button} from 'react-bootstrap';
 function Login({show, handleClose}) {
 
 	const {dispatch} = useContext(UserContext);
-	const[userLoggedIn, logInUser] = useResource((username, password)=>({
+	/*const[userLoggedIn, logInUser] = useResource((username, password)=>({
+		//url: '/api/auth/login',
 		url: `/login/${encodeURI(username)}/${encodeURI(password)}`,
 		method: 'get'
 		//method: 'post'
+	}))*/
+
+	const[userLoggedIn, logInUser] = useResource((username, password)=>({
+		url: '/auth/login',
+		method: 'post',
+		data: {username, password}
 	}))
-   console.log(show);
+
+   
 	const [loginFailed, setLoginFailed] = useState(false) 
 
     
-
+/*** JSON SERVER version
 	useEffect(()=>{
 		if(userLoggedIn && userLoggedIn.data){
 			if(userLoggedIn.data.length){
-				//const {access_token} = userLoggedIn.data.;
+				//const token = userLoggedIn.data.;
 				setLoginFailed(false)
 				console.log(userLoggedIn.data[0])
 				console.log(userLoggedIn.data[0].username)
@@ -32,9 +40,41 @@ function Login({show, handleClose}) {
 			}
 		}
 	},[userLoggedIn])
+*/
 
+
+/*
+	useEffect(()=>{
+		if(userLoggedIn && userLoggedIn.data){
+			if(userLoggedIn.data.access_token && userLoggedIn.data.username){
+				//const token = userLoggedIn.data.;
+				setLoginFailed(false)
+				console.log(userLoggedIn.data)
+				console.log(userLoggedIn.data.username)
+				dispatch({type:"LOGIN", username: userLoggedIn.data.username, token: userLoggedIn.data.access_token})
+				
+			}else{
+				console.log("Failed")
+				setLoginFailed(true)
+			}
+		}
+	},[userLoggedIn])*/
     const [username, setUsername] = useState('');
 	const [password, setPassword] = useState('');
+
+	    useEffect(() => {
+		        if (userLoggedIn && userLoggedIn.isLoading === false && (userLoggedIn.data || userLoggedIn.error)) {
+		            if (userLoggedIn.error) {
+		                setLoginFailed(true)
+		                alert('failed')
+		            } else {
+		                setLoginFailed(false)
+		                console.log(userLoggedIn.data)
+		                dispatch({ type: 'LOGIN', username, token: userLoggedIn.data.access_token })          
+		            }
+		        } 
+		    }, [userLoggedIn])
+
 
 	function handleUserName(evt){setUsername(evt.target.value)}
 	function updatePassword(evt){setPassword(evt.target.value)}

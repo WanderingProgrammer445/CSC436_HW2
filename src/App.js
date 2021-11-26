@@ -3,78 +3,91 @@ import UserLine from './UserLine';
 import AddToDo from './AddToDo';
 import react from 'react';
 import { useResource } from 'react-request-hook';
-import {useState, useReducer, useEffect} from 'react';
+import { useState, useReducer, useEffect } from 'react';
 import { ToDoContext, UserContext } from './Contexts';
 import { Container } from 'react-bootstrap';
-import {Router,View} from 'react-navi';
-import { route,mount} from 'navi';
+import { Router, View } from 'react-navi';
+import { route, mount } from 'navi';
 import UserPage from './UserPage';
 import ProfilePage from './ProfilePage';
+import { useContext } from 'react';
 
 function App() {
+
+    const routes = mount({
+        '/users': route({ view: <UserPage /> }),
+        '/users/:userId': route(async req => { view: <ProfilePage id={req.params.userId} /> })
+
+    })
+
    
-   const routes = mount({
-       '/users':route({view: <UserPage/>}),
-       '/users/:userId':route(async req =>{view: <ProfilePage id={req.params.userId}/>})
 
-   })
-
-   const [ toDos, getToDos ] = useResource(() => ({
+    const [toDos, getToDos] = useResource(() => ({
         url: '/todos',
         method: 'get'
-      }))
+    }))
+
+    const [toDosWithAuth, getToDosWithAuth] = useResource((token) => ({
+        url: '/todos',
+        method: 'get',
+        headers: { "Authorization": `${token}` }
+    }))
 
 
 
 
 
-    
 
-   const [ toDoCreated, createToDo ] = useResource((title, description, dateCreated, complete, dateCompleted) => ({
+    const [toDoCreated, createToDo] = useResource((title, description, dateCreated, complete, dateCompleted, token) => ({
         url: '/todos',
         method: 'post',
-        data: {title, description, dateCreated, complete, dateCompleted}
+        headers: { "Authorization": `${token}` },
+        data: { title, description, dateCreated, complete, dateCompleted }
 
-      }))
-    
-    function toDoReducer (state, action) {
+    }))
+
+    function toDoReducer(state, action) {
         switch (action.type) {
             case 'TOGGLE_TODO':
-              return state.map(
-                  (todo, i)=>{
+                return state.map(
+                    (todo, i) => {
 
-                      if(todo.id === action.toDoItemKey){
-                          return {... todo, dateCompleted: action.completed?action.date:'', complete: action.completed } 
+                        if (todo.id === action.toDoItemKey) {
+                            return { ...todo, dateCompleted: action.completed ? action.date : '', complete: action.completed }
                         } else {
                             return todo
                         }
                     })
-              
+
             case 'FETCH_TODOS':
-                return action.todos;  
+                console.log(action.todos)
+                return action.todos;
             case 'DELETE_TODO':
-                return state.filter((todo,i)=>{return todo.id!==action.toDoItemKey})
+                return state.filter((todo, i) => { return todo._id !== action.toDoItemKey })
             default:
-               return state;
+                return state;
         }
-      }
-    useEffect(getToDos,[toDoCreated])
-
- 
-
+    }
+    useEffect(getToDos, [toDoCreated])
     
-    const [toDoList, dispatchToDo] = useReducer(toDoReducer,[]);
-
     
+
+
+    const [toDoList, dispatchToDo] = useReducer(toDoReducer, []);
+
+
 
     useEffect(() => {
         if (toDos && toDos.data) {
+            //console.log("Got Todo")
             dispatchToDo({ type: 'FETCH_TODOS', todos: toDos.data })
         }
     }, [toDos])
 
-    useEffect(getToDos,[])
+    useEffect(getToDos, [])
     
+
+    /* //Only username
     function userReducer (state, action) {
         switch (action.type) {
             case 'LOGIN':
@@ -86,21 +99,37 @@ function App() {
                 return state;
         }
     }
-    
-   const [username, dispatchUser] = useReducer(userReducer,"");
+    */
+    function userReducer(state, action) {
+        switch (action.type) {
+            case 'LOGIN':
+            case 'REGISTER':
+                return { username: action.username, token: action.token }
+            case 'LOGOUT':
+                return { username: '', token: '' }
+            default:
+                return state;
+        }
+    }
 
-    return(
-        <div><UserContext.Provider value={{username: username, dispatch: dispatchUser}}>
-            <ToDoContext.Provider value={{toDoList: toDoList, dispatchToDo: dispatchToDo, createToDo: createToDo}}>
+    //const [username, dispatchUser] = useReducer(userReducer,""); //Username only
+
+    const [userCredentials, dispatchUser] = useReducer(userReducer, { username: '', token: '' });
+    
+    const { username, token } = userCredentials;
+    //console.log(toDoList);
+    return (
+        <div><UserContext.Provider value={{ username: username, token: token /*username*/, dispatch: dispatchUser }}>
+            <ToDoContext.Provider value={{ toDoList: toDoList, dispatchToDo: dispatchToDo, createToDo: createToDo, refreshToDo: getToDosWithAuth}}>
                 <Container>
-            <UserLine/>
-			{username && <AddToDo username={username} dispatchToDo={dispatchToDo}/>}
-			<ToDoList toDoList={toDoList} dispatchToDo={dispatchToDo}/>
+                    <UserLine />
+                    {username && <AddToDo />}
+                    {toDoList && <ToDoList />}
                 </Container>
             </ToDoContext.Provider>
-            </UserContext.Provider>
+        </UserContext.Provider>
         </div>
-  );
+    );
 }
 
 export default App;

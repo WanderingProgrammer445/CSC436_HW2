@@ -3,7 +3,7 @@ import {Link} from 'react-navi';
 function User({id, username}){
 
     return (<>
-    <Link>{username}</Link>
+    <Link href={`/users/${id}`}>{username}</Link>
     </>);
 
 }
