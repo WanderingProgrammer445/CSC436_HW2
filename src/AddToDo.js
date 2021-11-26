@@ -1,18 +1,34 @@
-import {useContext, useState} from 'react';
-import { ToDoContext } from './Contexts';
+import {useContext, useState, useEffect } from 'react';
+import {useResource} from 'react-request-hook'
+import { ToDoContext, UserContext } from './Contexts';
+import ToDo from './ToDo';
 
-function AddToDo({username, dispatchToDo}) {
+function AddToDo() {
 
 	const [title, setTitle] = useState('')
 
+	const{dispatchToDo, refreshToDo} = useContext(ToDoContext)
+
 	const [description, setDescription] = useState('')
 
+	const {token, username} = useContext(UserContext);
+
+    
+	
+
+	//const {dispatchToDo} = useContext(ToDoContext);
 	const {createToDo} = useContext(ToDoContext);
+	
+
+	
+
+
+	//useEffect(getToDosWithAuth(token),[toDoCreated])
 
 	function createToDoWrapper(){
 
-		createToDo(title, description, Date.now(), false,"")
-		
+		createToDo(title, description, Date.now(), false,"",token)
+		refreshToDo(token)
 
 	}
 
