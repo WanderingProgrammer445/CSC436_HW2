@@ -1,7 +1,7 @@
 import react, { useEffect } from 'react';
 import {useState} from 'react';
 import {useResource} from 'react-request-hook'
-import { useContext } from 'react/cjs/react.development';
+import { useContext } from 'react';
 import { UserContext } from './Contexts';
 import {Modal, Form, Button} from 'react-bootstrap';
 
