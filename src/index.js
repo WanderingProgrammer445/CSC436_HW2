@@ -9,8 +9,8 @@ import axios from 'axios'
 //baseURL: '/'
 const axiosInstance = axios.create({
   
-  
-  baseURL: 'http://localhost:3000/api/'
+  baseURL: '/'
+  //baseURL: 'http://localhost:3000/api/'
 })
 //Suspended component throws error so need to wrap with "fallback"
 ReactDOM.render(
