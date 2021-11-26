@@ -2,12 +2,13 @@ import react, { useEffect } from 'react';
 import {useState} from 'react';
 import {useResource} from 'react-request-hook'
 import { useContext } from 'react';
-import { UserContext } from './Contexts';
+import { UserContext, ToDoContext } from './Contexts';
 import {Modal, Form, Button} from 'react-bootstrap';
 
 function Login({show, handleClose}) {
 
 	const {dispatch} = useContext(UserContext);
+	const {refreshToDo} = useContext(ToDoContext);
 	/*const[userLoggedIn, logInUser] = useResource((username, password)=>({
 		//url: '/api/auth/login',
 		url: `/login/${encodeURI(username)}/${encodeURI(password)}`,
@@ -70,7 +71,8 @@ function Login({show, handleClose}) {
 		            } else {
 		                setLoginFailed(false)
 		                console.log(userLoggedIn.data)
-		                dispatch({ type: 'LOGIN', username, token: userLoggedIn.data.access_token })          
+		                dispatch({ type: 'LOGIN', username, token: userLoggedIn.data.access_token }) 
+		                refreshToDo(userLoggedIn.data.access_token)
 		            }
 		        } 
 		    }, [userLoggedIn])

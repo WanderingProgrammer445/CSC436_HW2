@@ -27,24 +27,22 @@ function App() {
         method: 'get'
     }))
 
+
+
     const [toDosWithAuth, getToDosWithAuth] = useResource((token) => ({
         url: '/todos',
         method: 'get',
         headers: { "Authorization": `${token}` }
     }))
 
+    
+
+	useEffect(()=>{console.log("ToDosWithAuth: "); console.log(toDosWithAuth);},[toDosWithAuth])
 
 
 
 
 
-    const [toDoCreated, createToDo] = useResource((title, description, dateCreated, complete, dateCompleted, token) => ({
-        url: '/todos',
-        method: 'post',
-        headers: { "Authorization": `${token}` },
-        data: { title, description, dateCreated, complete, dateCompleted }
-
-    }))
 
     function toDoReducer(state, action) {
         switch (action.type) {
@@ -52,7 +50,7 @@ function App() {
                 return state.map(
                     (todo, i) => {
 
-                        if (todo.id === action.toDoItemKey) {
+                        if (i === action.todo_id) {
                             return { ...todo, dateCompleted: action.completed ? action.date : '', complete: action.completed }
                         } else {
                             return todo
@@ -63,19 +61,23 @@ function App() {
                 console.log(action.todos)
                 return action.todos;
             case 'DELETE_TODO':
-                return state.filter((todo, i) => { return todo._id !== action.toDoItemKey })
+                return state.filter((todo, i) => { return i !== action.todo_id})
             default:
                 return state;
         }
     }
-    useEffect(getToDos, [toDoCreated])
+    
     
     
 
 
     const [toDoList, dispatchToDo] = useReducer(toDoReducer, []);
 
-
+    useEffect(()=>{
+        if(toDosWithAuth && toDosWithAuth.data){
+        dispatchToDo({type: "FETCH_TODOS", todos: toDosWithAuth.data})
+    }
+}, [toDosWithAuth])
 
     useEffect(() => {
         if (toDos && toDos.data) {
@@ -100,6 +102,17 @@ function App() {
         }
     }
     */
+
+    const [toDoCreated, createToDo] = useResource((title, description, dateCreated, complete, dateCompleted, token) => ({
+        url: '/todos',
+        method: 'post',
+        headers: { "Authorization": `${token}` },
+        data: { title, description, dateCreated, complete, dateCompleted }
+
+    }))
+
+    //useEffect(getToDos,[toDoCreated])
+    
     function userReducer(state, action) {
         switch (action.type) {
             case 'LOGIN':
@@ -118,6 +131,7 @@ function App() {
     
     const { username, token } = userCredentials;
     //console.log(toDoList);
+    
     return (
         <div><UserContext.Provider value={{ username: username, token: token /*username*/, dispatch: dispatchUser }}>
             <ToDoContext.Provider value={{ toDoList: toDoList, dispatchToDo: dispatchToDo, createToDo: createToDo, refreshToDo: getToDosWithAuth}}>

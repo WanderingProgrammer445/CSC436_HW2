@@ -3,14 +3,15 @@ import {ToDoContext,UserContext} from './Contexts'
 import {useResource} from 'react-request-hook'
 import { useEffect } from 'react';
 
-function ToDo({title='', description='', dateCreated=Date.now(), complete=false, listIndex, dateCompleted=Date.now(), canDeleteOrToggle=false, todo_id =""}) {
+function ToDo({title='', description='', dateCreated=Date.now(), complete=false, listIndex, dateCompleted=Date.now(), canToggleOrDelete= false, todo_id ="", id=""}) {
     const toDoKey = listIndex;
 	
 	const {token} = useContext(UserContext);
     //console.log(props);
 	
 //	console.log(description);
-
+    console.log("canToggleOrDelete: ")
+    console.log(canToggleOrDelete)
 	const[toDoDeleted, deleteToDo] = useResource((id)=>({
         url: `/todos/${id}`,
         method: 'delete',
@@ -30,20 +31,20 @@ function ToDo({title='', description='', dateCreated=Date.now(), complete=false,
 
 	
     
-	const {dispatchToDo, createToDo} = useContext(ToDoContext)
+	const {dispatchToDo} = useContext(ToDoContext)
 	
 
 	function handleDelete(evt){
-        dispatchToDo({type:"DELETE_TODO", toDoItemKey: toDoKey})
-        deleteToDo(todo_id)
+        dispatchToDo({type:"DELETE_TODO", todo_id: todo_id})
+        deleteToDo(id)
 
 
 	}
 
 	function handleToggle(evt){
 		const date = Date.now()
-        dispatchToDo({type: "TOGGLE_TODO", toDoItemKey: toDoKey, completed: evt.target.checked, date: date})
-		toggleToDo(todo_id, title, description, dateCreated, evt.target.checked, evt.target.checked?date:'')
+        dispatchToDo({type: "TOGGLE_TODO", todo_id: todo_id, completed: evt.target.checked, date: date})
+		toggleToDo(id, title, description, dateCreated, evt.target.checked, evt.target.checked?date:'')
 	}
     return (
         <div>
@@ -51,8 +52,8 @@ function ToDo({title='', description='', dateCreated=Date.now(), complete=false,
 		    <p>{description}</p>
 		    <p>This todo was created on {dateCreated}</p>
 		    <p>This todo was completed on {dateCompleted}</p>
-		    <input  type="checkbox" disabled={username==="" || (!canDeleteOrToggle)}  checked={complete} onClick={handleToggle}/>
-			<button type="button" disabled={username==="" || (!canDeleteOrToggle)} onClick={handleDelete}>Delete</button>
+		    <input  type="checkbox" disabled={username==="" || (!canToggleOrDelete)}  checked={complete} onClick={handleToggle}/>
+			<button type="button" disabled={username==="" || (!canToggleOrDelete)} onClick={handleDelete}>Delete</button>
 	    </div>
   );
   
