@@ -10,13 +10,15 @@ import { Router, View } from 'react-navi';
 import { route, mount } from 'navi';
 import UserPage from './UserPage';
 import ProfilePage from './ProfilePage';
+import HomePage from './HomePage';
 import { useContext } from 'react';
 
 function App() {
 
     const routes = mount({
+        '/': route({view: <HomePage/>}),
         '/users': route({ view: <UserPage /> }),
-        '/users/:userId': route(async req => { view: <ProfilePage id={req.params.userId} /> })
+        '/users/:userId': route(req => { return {view: <ProfilePage id={req.params.userId} />} })
 
     })
 
@@ -135,11 +137,14 @@ function App() {
     return (
         <div><UserContext.Provider value={{ username: username, token: token /*username*/, dispatch: dispatchUser }}>
             <ToDoContext.Provider value={{ toDoList: toDoList, dispatchToDo: dispatchToDo, createToDo: createToDo, refreshToDo: getToDosWithAuth}}>
+               <Router routes={routes}>
                 <Container>
                     <UserLine />
-                    {username && <AddToDo />}
-                    {toDoList && <ToDoList />}
+                    <hr/>
+                    <View/>
+
                 </Container>
+                </Router>
             </ToDoContext.Provider>
         </UserContext.Provider>
         </div>
